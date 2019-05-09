@@ -1,6 +1,7 @@
 package ca.clubrockets.anirniq.ble.views;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,12 +12,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import ca.clubrockets.anirniq.ble.R;
+import ca.clubrockets.anirniq.ble.databinding.ViewMainDeviceBinding;
 import ca.clubrockets.anirniq.ble.models.SwitchDevice;
 
 public class SwitchDeviceView extends ConstraintLayout {
     private ProgressBar progress;
     private Switch switch_power, switch_drogue, switch_main;
     private SwitchDevice device;
+    private ViewMainDeviceBinding binding;
 
     public SwitchDeviceView(Context context) {
         super(context);
@@ -35,7 +38,7 @@ public class SwitchDeviceView extends ConstraintLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_main_device, this, true);
+        binding = ViewMainDeviceBinding.inflate(inflater, this, true);
 
         if (getLayoutParams() == null) {
             setLayoutParams(new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -44,34 +47,34 @@ public class SwitchDeviceView extends ConstraintLayout {
             getLayoutParams().width = LayoutParams.MATCH_PARENT;
         }
 
-
         progress = findViewById(R.id.device_refresh_progress);
         switch_power = findViewById(R.id.switch_charge_power);
         switch_drogue = findViewById(R.id.switch_charge_drogue);
         switch_main = findViewById(R.id.switch_charge_main);
 
         progress.setVisibility(INVISIBLE);
-        switch_power.setOnCheckedChangeListener(new SwitchChangeListener("power"));
-        switch_drogue.setOnCheckedChangeListener(new SwitchChangeListener("drogue"));
-        switch_main.setOnCheckedChangeListener(new SwitchChangeListener("main"));
     }
 
     public void bind(SwitchDevice device) {
         this.device = device;
-        ((TextView) findViewById(R.id.switch_device_name)).setText(device.getName());
+        binding.setDevice(device);
+        switch_power.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.POWER));
+        switch_drogue.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.DROGUE));
+        switch_main.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.MAIN));
     }
 
     private class SwitchChangeListener implements CompoundButton.OnCheckedChangeListener {
-        private String charge;
+        private final int charge;
 
-        public SwitchChangeListener(String charge) {
+        public SwitchChangeListener(int charge) {
             super();
             this.charge = charge;
+
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Log.i("Switch", charge + " is " + (isChecked ? "armed" : "disarmed"));
+            device.setCharge(charge, isChecked);
         }
     }
 }

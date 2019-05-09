@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
+public class ScanDeviceListAdapter extends RecyclerView.Adapter<ScanDeviceListAdapter.ScanDeviceViewHolder> {
     private ArrayList<BluetoothDevice> current;
     private ArrayList<BluetoothDevice> devices;
     private ArrayList<BluetoothDevice> devices_named;
 
-    public static class DeviceViewHolder extends RecyclerView.ViewHolder {
+    public static class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
         private View view;
 
-        public DeviceViewHolder(View v) {
+        public ScanDeviceViewHolder(View v) {
             super(v);
             this.view = v;
         }
@@ -33,7 +33,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         }
     }
 
-    public DeviceListAdapter() {
+    public ScanDeviceListAdapter() {
         this.devices = new ArrayList<>();
         this.devices_named = new ArrayList<>();
         this.current = devices;
@@ -60,14 +60,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     @NonNull
     @Override
-    public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_view, parent, false);
-        DeviceViewHolder vh = new DeviceViewHolder(v);
+    public ScanDeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_scan_device, parent, false);
+        ScanDeviceViewHolder vh = new ScanDeviceViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ScanDeviceViewHolder holder, int position) {
         holder.setDevice(current.get(position));
     }
 

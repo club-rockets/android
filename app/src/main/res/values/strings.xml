@@ -4,4 +4,8 @@
     <string name="action_filter_unnamed">Show unnamed devices</string>
     <string name="ble_not_supported">BLE not supported on this device!</string>
     <string name="ble_supported">BLE is supported on this device</string>
+    <string name="default_switch_device_name">Switch</string>
+    <string name="charge_power">Power</string>
+    <string name="charge_drogue">Drogue</string>
+    <string name="charge_main">Main</string>
 </resources>

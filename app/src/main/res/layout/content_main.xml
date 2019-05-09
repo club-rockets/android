@@ -6,24 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_scanning"
-    tools:context=".MainActivity">
-
-    <ProgressBar
-        android:id="@+id/scan_progress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:showIn="@layout/activity_scan"
+    tools:context=".ScanningActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/device_list_view"
+        android:id="@+id/switch_device_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/scan_progress"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="63dp"
         tools:layout_editor_absoluteY="8dp" />
 </android.support.constraint.ConstraintLayout>

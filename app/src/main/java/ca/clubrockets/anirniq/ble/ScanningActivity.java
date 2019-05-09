@@ -8,7 +8,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,28 +20,28 @@ import android.view.View;
 
 public class ScanningActivity extends AppCompatActivity {
 
-    private DeviceListAdapter deviceListAdapter;
+    private ScanDeviceListAdapter scanDeviceListAdapter;
     private BluetoothAdapter bluetoothAdapter;
     private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scanning);
+        setContentView(R.layout.activity_scan);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        deviceListAdapter = new DeviceListAdapter();
+        scanDeviceListAdapter = new ScanDeviceListAdapter();
         handler = new Handler();
 
         final BluetoothManager bluetoothManager =  (BluetoothManager) getSystemService(this.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
         /* Setup recycler view */
-        RecyclerView rv = findViewById(R.id.device_list_view);
+        RecyclerView rv = findViewById(R.id.scan_device_list);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(deviceListAdapter);
+        rv.setAdapter(scanDeviceListAdapter);
 
         /* Setup FAB*/
         findViewById(R.id.fab_scan).setOnClickListener(new View.OnClickListener() {
@@ -77,7 +76,7 @@ public class ScanningActivity extends AppCompatActivity {
 
         if (id == R.id.action_filter_unnamed) {
             item.setChecked(!item.isChecked());
-            deviceListAdapter.setFilterUnnamed(item.isChecked());
+            scanDeviceListAdapter.setFilterUnnamed(item.isChecked());
             return true;
         }
 
@@ -86,7 +85,7 @@ public class ScanningActivity extends AppCompatActivity {
 
     private void scanLeDevice(final boolean enable) {
         findViewById(R.id.scan_progress).setVisibility(View.VISIBLE);
-        deviceListAdapter.clear();
+        scanDeviceListAdapter.clear();
         if (enable) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -95,7 +94,6 @@ public class ScanningActivity extends AppCompatActivity {
                     bluetoothAdapter.stopLeScan(leScanCallback);
                 }
             }, 10000);
-
             bluetoothAdapter.startLeScan(leScanCallback);
         } else {
             bluetoothAdapter.stopLeScan(leScanCallback);
@@ -108,8 +106,8 @@ public class ScanningActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    deviceListAdapter.addDevice(device);
-                    deviceListAdapter.notifyDataSetChanged();
+                    scanDeviceListAdapter.addDevice(device);
+                    scanDeviceListAdapter.notifyDataSetChanged();
                 }
             });
         }

@@ -1,4 +1,4 @@
-package ca.clubrockets.anirniq.ble;
+package ca.clubrockets.anirniq.ble.models;
 
 import android.util.Log;
 

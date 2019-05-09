@@ -1,4 +1,4 @@
-package ca.clubrockets.anirniq.ble;
+package ca.clubrockets.anirniq.ble.adapters;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ca.clubrockets.anirniq.ble.R;
 
 public class ScanDeviceListAdapter extends RecyclerView.Adapter<ScanDeviceListAdapter.ScanDeviceViewHolder> {
     private ArrayList<BluetoothDevice> current;
@@ -46,6 +48,7 @@ public class ScanDeviceListAdapter extends RecyclerView.Adapter<ScanDeviceListAd
                 devices_named.add(device);
             }
         }
+        notifyDataSetChanged();
     }
 
     public void clear() {

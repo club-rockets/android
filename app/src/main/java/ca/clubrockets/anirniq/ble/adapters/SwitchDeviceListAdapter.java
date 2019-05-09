@@ -1,10 +1,13 @@
-package ca.clubrockets.anirniq.ble;
+package ca.clubrockets.anirniq.ble.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import ca.clubrockets.anirniq.ble.models.SwitchDevice;
+import ca.clubrockets.anirniq.ble.views.SwitchDeviceView;
 
 public class SwitchDeviceListAdapter extends RecyclerView.Adapter<SwitchDeviceListAdapter.SwitchDeviceViewHolder> {
     private ArrayList<SwitchDevice> devices;

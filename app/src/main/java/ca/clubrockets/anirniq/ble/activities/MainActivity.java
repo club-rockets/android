@@ -1,4 +1,4 @@
-package ca.clubrockets.anirniq.ble;
+package ca.clubrockets.anirniq.ble.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+
+import ca.clubrockets.anirniq.ble.R;
+import ca.clubrockets.anirniq.ble.models.SwitchDevice;
+import ca.clubrockets.anirniq.ble.adapters.SwitchDeviceListAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_scan) {
-            Intent intent = new Intent(this, ScanningActivity.class);
+            Intent intent = new Intent(this, ScanActivity.class);
             startActivity(intent);
             return true;
         }

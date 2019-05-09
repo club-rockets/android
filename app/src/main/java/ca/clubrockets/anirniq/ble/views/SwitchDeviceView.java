@@ -1,4 +1,4 @@
-package ca.clubrockets.anirniq.ble;
+package ca.clubrockets.anirniq.ble.views;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
@@ -9,6 +9,9 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import ca.clubrockets.anirniq.ble.R;
+import ca.clubrockets.anirniq.ble.models.SwitchDevice;
 
 public class SwitchDeviceView extends ConstraintLayout {
     private ProgressBar progress;

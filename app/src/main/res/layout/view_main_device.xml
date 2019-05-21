@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:indeterminate="true"
-                    android:visibility="visible" />
+                    android:visibility="@{device.progress}" />
             </LinearLayout>
 
             <Switch
@@ -54,21 +54,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/charge_power" />
+                android:text="@string/charge_power"
+                android:checked="@{device.power}"
+                android:enabled="@{device.progress == 4}" />
 
             <Switch
                 android:id="@+id/switch_charge_drogue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/charge_drogue" />
+                android:text="@string/charge_drogue"
+                android:checked="@{device.drogue}"
+                android:enabled="@{device.progress == 4}" />
 
             <Switch
                 android:id="@+id/switch_charge_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/charge_main" />
+                android:text="@string/charge_main"
+                android:checked="@{device.main}"
+                android:enabled="@{device.progress == 4}" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

@@ -1,8 +1,11 @@
 package ca.clubrockets.anirniq.ble.adapters;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +22,14 @@ public class ScanDeviceListAdapter extends RecyclerView.Adapter<ScanDeviceListAd
 
     public static class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
         private View view;
+        private BluetoothDevice device;
 
         public ScanDeviceViewHolder(View v) {
             super(v);
             this.view = v;
         }
 
-        public void setDevice(BluetoothDevice device) {
+        public void setDevice(final BluetoothDevice device) {
             String name = device.getName();
             if (name == null || name.isEmpty()) {
                 name = "<unnamed device>";

@@ -1,5 +1,7 @@
 package ca.clubrockets.anirniq.ble.activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import ca.clubrockets.anirniq.ble.R;
 import ca.clubrockets.anirniq.ble.models.SwitchDevice;
@@ -27,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ArrayList<SwitchDevice> devices = new ArrayList<>();
-        devices.add(new SwitchDevice("Anirniq"));
-        devices.add(new SwitchDevice("StratoLogger CF"));
+        devices.add(new SwitchDevice("Anirniq", findDeviceByMac("00:60:37:14:AD:EB")));
+        devices.add(new SwitchDevice("StratoLogger", findDeviceByMac("00:60:37:A5:99:68")));
         switchDeviceListAdapter = new SwitchDeviceListAdapter(devices);
 
         /* Setup recycler view */
@@ -36,6 +39,19 @@ public class MainActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(switchDeviceListAdapter);
+    }
+
+    private BluetoothDevice findDeviceByMac(String mac) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+        for (BluetoothDevice device : pairedDevices) {
+            if (device.getAddress().equals(mac)) {
+                return device;
+            }
+        }
+
+        return null;
     }
 
     @Override

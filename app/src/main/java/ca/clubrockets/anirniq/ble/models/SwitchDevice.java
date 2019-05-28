@@ -45,9 +45,12 @@ public class SwitchDevice {
     public ObservableBoolean main;
     public ObservableInt progress;
 
-    public SwitchDevice(String name, BluetoothDevice device) {
+    private Context context;
+
+    public SwitchDevice(String name, BluetoothDevice device, Context context) {
         this.name = name;
         this.device = device;
+        this.context = context;
 
         power = new ObservableBoolean(false);
         drogue = new ObservableBoolean(false);
@@ -55,8 +58,17 @@ public class SwitchDevice {
         progress = new ObservableInt(View.VISIBLE);
     }
 
-    public void connect(Context context) {
+    public void connect() {
         device.connectGatt(context, true, gattCallback);
+    }
+
+    public void refresh() {
+        if (device_gatt != null) {
+            device_gatt.readCharacteristic(getCharacteristic(POWER, READ));
+        }
+        else {
+            connect();
+        }
     }
 
     public String getName() { return name; }
@@ -91,9 +103,9 @@ public class SwitchDevice {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 gatt.discoverServices();
                 device_gatt = gatt;
-                Log.w(name, "Connected");
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.w(name, "Disconnected");
+                device_gatt = null;
+                progress.set(View.INVISIBLE);
             }
         }
 
@@ -101,6 +113,9 @@ public class SwitchDevice {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 gatt.readCharacteristic(getCharacteristic(POWER, READ));
+                gatt.setCharacteristicNotification(getCharacteristic(POWER, READ), true);
+                gatt.setCharacteristicNotification(getCharacteristic(DROGUE, READ), true);
+                gatt.setCharacteristicNotification(getCharacteristic(MAIN, READ), true);
             } else {
                 Log.w(name, "onServicesDiscovered received: " + status);
             }
@@ -123,8 +138,19 @@ public class SwitchDevice {
         }
 
         @Override
-        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            gatt.readCharacteristic(getCharacteristic(POWER, READ));
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            if (characteristic.getUuid().equals(POWER_READ_UUID)) {
+                power.set(characteristic.getValue()[0] == 1);
+                progress.set(View.INVISIBLE);
+            }
+            if (characteristic.getUuid().equals(DROGUE_READ_UUID)) {
+                drogue.set(characteristic.getValue()[0] == 1);
+                progress.set(View.INVISIBLE);
+            }
+            if (characteristic.getUuid().equals(MAIN_READ_UUID)) {
+                main.set(characteristic.getValue()[0] == 1);
+                progress.set(View.INVISIBLE);
+            }
         }
     };
 }

@@ -9,12 +9,19 @@
     tools:showIn="@layout/activity_scan"
     tools:context=".activities.ScanActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/switch_device_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="63dp"
-        tools:layout_editor_absoluteY="8dp" />
+        android:foregroundTint="#00FF0000">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/switch_device_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="63dp"
+            tools:layout_editor_absoluteY="8dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>

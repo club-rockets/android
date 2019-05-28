@@ -61,7 +61,6 @@ public class SwitchDeviceView extends ConstraintLayout {
     public void bind(SwitchDevice device) {
         this.device = device;
         binding.setDevice(device);
-        device.connect(getContext());
         switch_power.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.POWER));
         switch_drogue.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.DROGUE));
         switch_main.setOnCheckedChangeListener(new SwitchChangeListener(SwitchDevice.MAIN));

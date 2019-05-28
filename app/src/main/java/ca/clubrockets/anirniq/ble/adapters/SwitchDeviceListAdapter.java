@@ -25,8 +25,21 @@ public class SwitchDeviceListAdapter extends RecyclerView.Adapter<SwitchDeviceLi
         }
     }
 
-    public SwitchDeviceListAdapter(ArrayList<SwitchDevice> devices) {
-        this.devices = devices;
+    public SwitchDeviceListAdapter() {
+        devices = new ArrayList<>();
+    }
+
+    public void add(SwitchDevice device) {
+        if (device != null) {
+            devices.add(device);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void refresh() {
+        for (SwitchDevice device : devices) {
+            device.refresh();
+        }
     }
 
     @NonNull

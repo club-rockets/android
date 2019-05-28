@@ -4,14 +4,17 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import ca.clubrockets.anirniq.ble.R;
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SwitchDeviceListAdapter switchDeviceListAdapter;
 
+    private final int REQUEST_ENABLE_BLUETOOTH = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,25 +34,55 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ArrayList<SwitchDevice> devices = new ArrayList<>();
-        devices.add(new SwitchDevice("Anirniq", findDeviceByMac("00:60:37:14:AD:EB")));
-        devices.add(new SwitchDevice("StratoLogger", findDeviceByMac("00:60:37:A5:99:68")));
-        switchDeviceListAdapter = new SwitchDeviceListAdapter(devices);
+        final SwipeRefreshLayout refreshLayout = findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                switchDeviceListAdapter.refresh();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         /* Setup recycler view */
+        switchDeviceListAdapter = new SwitchDeviceListAdapter();
         RecyclerView rv = findViewById(R.id.switch_device_list);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(switchDeviceListAdapter);
+
+        prepareBluetooth();
     }
 
-    private BluetoothDevice findDeviceByMac(String mac) {
+    private void prepareBluetooth() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (!adapter.isEnabled()) {
+            Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enable, REQUEST_ENABLE_BLUETOOTH);
+        }
+
+        switchDeviceListAdapter.add(findDeviceByMac("Anirniq", "00:60:37:14:AD:EB"));
+        switchDeviceListAdapter.add(findDeviceByMac("StratoLogger", "00:60:37:A5:99:68"));
+    }
+
+    @Override
+    protected void onActivityResult(int request, int result, Intent data) {
+        switch (request) {
+            case REQUEST_ENABLE_BLUETOOTH:
+                prepareBluetooth();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private SwitchDevice findDeviceByMac(String name, String mac) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
         for (BluetoothDevice device : pairedDevices) {
             if (device.getAddress().equals(mac)) {
-                return device;
+                return new SwitchDevice(name, device, this);
             }
         }
 
